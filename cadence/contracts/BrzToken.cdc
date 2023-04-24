@@ -10,11 +10,12 @@ pub contract BrzToken: FungibleToken {
     
     /// Storage and Public Paths
     pub let VaultStoragePath: StoragePath
-    pub let VaultPublicPath: PublicPath
     pub let AdminStoragePath: StoragePath
     pub let MinterStoragePath: StoragePath
     pub let PauserStoragePath: StoragePath
     pub let BurnerStoragePath: StoragePath
+    pub let VaultPublicPath: PublicPath
+    pub let ReceiverPublicPath: PublicPath
 
 
     /// The event that is emitted when the contract is created
@@ -48,7 +49,7 @@ pub contract BrzToken: FungibleToken {
     /// out of thin air. A special Minter resource needs to be defined to mint
     /// new tokens.
     ///
-    pub resource Vault: FungibleToken.Provider, FungibleToken.Receiver, FungibleToken.Balance {
+     pub resource Vault: FungibleToken.Provider, FungibleToken.Receiver, FungibleToken.Balance {
 
         /// The total balance of this vault
         pub var balance: UFix64
@@ -74,7 +75,7 @@ pub contract BrzToken: FungibleToken {
             pre {
                 !BrzToken.isPausedState: "Deposits are paused!"
             }
-            
+
             self.balance = self.balance - amount
             emit TokensWithdrawn(amount: amount, from: self.owner?.address)
             return <-create Vault(balance: amount)
@@ -88,6 +89,8 @@ pub contract BrzToken: FungibleToken {
         ///
         /// @param from: The Vault resource containing the funds that will be deposited
         ///
+
+
         pub fun deposit(from: @FungibleToken.Vault) {
             //Before everything on this function we will check if BrzToken isPausedState it's true. 
             //If it's true we panic and abort the function displaying the message
@@ -217,11 +220,13 @@ pub contract BrzToken: FungibleToken {
 
         // -------------------- PATHS
         self.VaultStoragePath = /storage/BrzTokenVault
-        self.VaultPublicPath = /public/BrzTokenReceiver
         self.MinterStoragePath = /storage/BrzTokenMinter
         self.AdminStoragePath = /storage/BrzTokenAdmin
         self.PauserStoragePath = /storage/BrzTokenPauser
         self.BurnerStoragePath = /storage/BrzTokenBurner
+        self.VaultPublicPath = /public/BrzTokenReceiver
+        self.ReceiverPublicPath = /public/BrzTokenReceiver
+        
 
         // Create the Vault with the initial total supply of tokens and save it in storage.
         let vault <- create Vault(balance: self.totalSupply)
@@ -231,11 +236,11 @@ pub contract BrzToken: FungibleToken {
         // Create a public capability to the stored Vault that exposes
         // the `deposit` method through the `Receiver` interface.
         self.account.link<&{FungibleToken.Receiver}>(
-            self.VaultPublicPath,
+            self.ReceiverPublicPath,
             target: self.VaultStoragePath
         )
 
-        // Create a public capability to the stored Vault that only exposes
+         // Create a public capability to the stored Vault that only exposes
         // the `balance` field and the `resolveView` method through the `Balance` interface
         self.account.link<&BrzToken.Vault{FungibleToken.Balance}>(
             self.VaultPublicPath,
