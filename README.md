@@ -1,4 +1,4 @@
-# BRZonFlow
+# BrzCadence
 BRZ token implementation using the Cadence language, targeting the Flow Blockchain
 
 
