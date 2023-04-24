@@ -1,4 +1,4 @@
-import FungibleToken from 0xe355c280131dfaf18bf1c3648aee3c396db6b5fd
+import FungibleToken from 0xee82856bf20e2aa6
 
 pub contract BrzToken: FungibleToken {
 

@@ -1,15 +1,16 @@
-import ExampleToken from 0x01
-import FungibleToken from 0xe355c280131dfaf18bf1c3648aee3c396db6b5fd
+import BrzToken from 0xf8d6e0586b0a20c7
+import FungibleToken from 0xee82856bf20e2aa6
 
 transaction (amount: UFix64){
 
   prepare(acct: AuthAccount, receiver: AuthAccount) {
-    let adminStorage = acct.borrow<&ExampleToken.Administrator>(from: ExampleToken.AdminStoragePath) ?? panic("No Admin Path found")
+    let adminStorage = acct.borrow<&BrzToken.Administrator>(from: BrzToken.AdminStoragePath) ?? panic("No Admin Path found")
     let burner <- adminStorage.createNewBurner(allowedAmount: amount)
 
-    receiver.save(<- burner, to: ExampleToken.BurnerStoragePath)
+    receiver.save(<- burner, to: BrzToken.BurnerStoragePath)
   }
 
   execute {
   }
 }
+ 

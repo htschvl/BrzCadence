@@ -1,8 +1,9 @@
-import ExampleToken from 0x01
-import FungibleToken from 0xe355c280131dfaf18bf1c3648aee3c396db6b5fd
+import BrzToken from 0xf8d6e0586b0a20c7
+import FungibleToken from 0xee82856bf20e2aa6
+
 transaction (){
   prepare(acct: AuthAccount) {
-    let adminStorage = acct.borrow<&ExampleToken.Pauser>(from: ExampleToken.PauserStoragePath)!
+    let adminStorage = acct.borrow<&BrzToken.Pauser>(from: BrzToken.PauserStoragePath)!
     adminStorage.pauseUnpauseTokens()
   }
 
