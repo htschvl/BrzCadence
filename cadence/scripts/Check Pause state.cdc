@@ -1,5 +1,5 @@
-import ExampleToken from 0x01
+import BrzToken from 0xf8d6e0586b0a20c7
 
 pub fun main(): Bool {
-  return ExampleToken.isPausedState
+  return BrzToken.isPausedState
 }

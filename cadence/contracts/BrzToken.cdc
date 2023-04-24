@@ -223,9 +223,6 @@ pub contract BrzToken: FungibleToken {
         self.PauserStoragePath = /storage/BrzTokenPauser
         self.BurnerStoragePath = /storage/BrzTokenBurner
 
-        // Create the Vault with the total supply of tokens and save it in storage.
-        let vault <- create Vault(balance: self.totalSupply)
-        self.account.save(<-vault, to: self.VaultStoragePath)
 
         // Create a public capability to the stored Vault that exposes
         // the `deposit` method through the `Receiver` interface.
@@ -246,6 +243,12 @@ pub contract BrzToken: FungibleToken {
 
         let pauserResource <- create Pauser()
         self.account.save(<-pauserResource, to: self.PauserStoragePath)
+
+        let burnerResource <- create Burner()
+        self.account.save(<-burnerResource, to: self.BurnerStoragePath)
+
+        let minterResource <- create Minter(allowedAmount: UFix64.max)
+        self.account.save(<-minterResource, to: self.MinterStoragePath)
 
         // Emit an event that shows that the contract was initialized
         emit TokensInitialized(initialSupply: self.totalSupply)
