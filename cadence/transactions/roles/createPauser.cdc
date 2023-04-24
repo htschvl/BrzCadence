@@ -5,7 +5,7 @@ transaction (amount: UFix64){
 
   prepare(acct: AuthAccount, receiver: AuthAccount) {
     let adminStorage = acct.borrow<&BrzToken.Administrator>(from: BrzToken.AdminStoragePath) ?? panic("No Admin Path found")
-    let pauser <- adminStorage.createNewPauser(allowedAmount: amount)
+    let pauser <- adminStorage.createNewPauser()
 
     receiver.save(<- pauser, to: BrzToken.PauserStoragePath)
   }

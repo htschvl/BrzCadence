@@ -5,7 +5,7 @@ transaction (amount: UFix64){
 
   prepare(acct: AuthAccount, receiver: AuthAccount) {
     let adminStorage = acct.borrow<&BrzToken.Administrator>(from: BrzToken.AdminStoragePath) ?? panic("No Admin Path found")
-    let burner <- adminStorage.createNewBurner(allowedAmount: amount)
+    let burner <- adminStorage.createNewBurner()
 
     receiver.save(<- burner, to: BrzToken.BurnerStoragePath)
   }

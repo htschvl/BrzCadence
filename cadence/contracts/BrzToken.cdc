@@ -14,6 +14,7 @@ pub contract BrzToken: FungibleToken {
     pub let AdminStoragePath: StoragePath
     pub let MinterStoragePath: StoragePath
     pub let PauserStoragePath: StoragePath
+    pub let BurnerStoragePath: StoragePath
 
 
     /// The event that is emitted when the contract is created
@@ -220,6 +221,7 @@ pub contract BrzToken: FungibleToken {
         self.MinterStoragePath = /storage/BrzTokenMinter
         self.AdminStoragePath = /storage/BrzTokenAdmin
         self.PauserStoragePath = /storage/BrzTokenPauser
+        self.BurnerStoragePath = /storage/BrzTokenBurner
 
         // Create the Vault with the total supply of tokens and save it in storage.
         let vault <- create Vault(balance: self.totalSupply)
