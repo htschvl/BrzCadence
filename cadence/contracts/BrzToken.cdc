@@ -212,7 +212,7 @@ pub contract BrzToken: FungibleToken {
     init() {
 
         // -------------------- INITIAL STATES WHEN CONTRACT IT'S DEPLOYED
-        self.totalSupply = 0.0
+        self.totalSupply = 1.00
         self.isPausedState = false
 
         // -------------------- PATHS
@@ -222,6 +222,10 @@ pub contract BrzToken: FungibleToken {
         self.AdminStoragePath = /storage/BrzTokenAdmin
         self.PauserStoragePath = /storage/BrzTokenPauser
         self.BurnerStoragePath = /storage/BrzTokenBurner
+
+        // Create the Vault with the initial total supply of tokens and save it in storage.
+        let vault <- create Vault(balance: self.totalSupply)
+        self.account.save(<-vault, to: self.VaultStoragePath)
 
 
         // Create a public capability to the stored Vault that exposes
