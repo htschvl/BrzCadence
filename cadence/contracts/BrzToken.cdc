@@ -239,6 +239,13 @@ pub contract BrzToken: FungibleToken {
             target: self.VaultStoragePath
         )
 
+        // Create a public capability to the stored Vault that exposes
+        // the `deposit` method through the `Receiver` interface.
+        self.account.link<&{FungibleToken.Receiver}>(
+            self.ReceiverPublicPath,
+            target: self.VaultStoragePath
+        )
+
         let admin <- create Administrator()
         self.account.save(<-admin, to: self.AdminStoragePath)
 
