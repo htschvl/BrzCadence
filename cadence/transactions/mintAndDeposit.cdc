@@ -9,10 +9,11 @@ transaction (amount: UFix64, receiverAddress: Address){
     let mintedTokensVault <- adminStorage.mintTokens(amount: amount)
 
     let receiver = getAccount(receiverAddress)
-    let receiverCapability = receiver.getCapability<&BrzToken.Vault{FungibleToken.Receiver}>(BrzToken.VaultPublicPath).borrow() ?? panic("User doesn't contains this capability on this path")
+    let receiverCapability = receiver.getCapability<&{FungibleToken.Receiver}>(BrzToken.ReceiverPublicPath).borrow() ?? panic("User doesn't contains this capability on this path")
     receiverCapability.deposit(from: <- mintedTokensVault)
   }
 
   execute {
   }
 }
+ 

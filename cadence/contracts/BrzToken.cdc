@@ -232,15 +232,7 @@ pub contract BrzToken: FungibleToken {
         let vault <- create Vault(balance: self.totalSupply)
         self.account.save(<-vault, to: self.VaultStoragePath)
 
-
-        // Create a public capability to the stored Vault that exposes
-        // the `deposit` method through the `Receiver` interface.
-        self.account.link<&{FungibleToken.Receiver}>(
-            self.ReceiverPublicPath,
-            target: self.VaultStoragePath
-        )
-
-         // Create a public capability to the stored Vault that only exposes
+        // Create a public capability to the stored Vault that only exposes
         // the `balance` field and the `resolveView` method through the `Balance` interface
         self.account.link<&BrzToken.Vault{FungibleToken.Balance}>(
             self.VaultPublicPath,
